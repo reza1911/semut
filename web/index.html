@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WELCOME</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    h1 {
+      font-size: 100px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(
+        270deg,
+        #ff0000,
+        #ff9900,
+        #33ff00,
+        #00ffff,
+        #3300ff,
+        #ff00ff,
+        #ff0000
+      );
+      background-size: 1000% 100%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 5s linear infinite;
+    }
+
+    @keyframes rainbow {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 100% 50%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>WELCOME TO ME</h1>
+</body>
+</html>
