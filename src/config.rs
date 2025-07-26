@@ -16,7 +16,7 @@ impl Config {
     /// dan path publik hanya menggunakan "/vmess".
     pub fn manual() -> Self {
         Config {
-            uuid: Uuid::new_v4(),
+            uuid: Uuid::parse_str("c7f299d0-ffdf-4361-9439-00e08e55d2fc").unwrap(),
             host: String::from("example.com"),          // Ganti jika punya domain sendiri
             proxy_addr: String::from("4.145.124.60"),   // IP proxy yang disembunyikan
             proxy_port: 443,                            // Port proxy
