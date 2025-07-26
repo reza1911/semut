@@ -72,7 +72,7 @@ async fn sub(_: Request, cx: RouteContext<Config>) -> Result<Response> {
 }
 
 async fn tunnel(req: Request, mut cx: RouteContext<Config>) -> Result<Response> {
-    let mut proxyip = cx.param("proxyip").unwrap_or("default").to_string();
+    let mut proxyip = cx.param("proxyip").map_or("default".to_string(), |v| v.to_string());
 
     if PROXYKV_PATTERN.is_match(&proxyip) {
         let kvid_list: Vec<String> = proxyip.split(',').map(|s| s.to_string()).collect();
