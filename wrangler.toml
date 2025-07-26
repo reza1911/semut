@@ -6,19 +6,19 @@
 # 5. UUID
 
 # ===============[ nama worker ]=================
-name = "www"
+name = "tester"
 main = "build/worker/shim.mjs"
 compatibility_date = "2024-05-23"
 minify = true
 
 # ===============[ account id ]==================
-account_id = "794de56a679a7e730b64ff5461c955fa"
+account_id = "487b5e794560518a4a9880cfafa1dd22"
 workers_dev = true
 
 # ===============[ KV STORAGE ]==================
 [[kv_namespaces]]
 binding = "AIO"
-id = "8ff6bcdf8a3b476d889060ec904ef941"
+id = "4b2249c348ac45b5a3b83ac83f5a8ddd"
 
 [build]
 command = "cargo install worker-build && worker-build --release"
@@ -28,8 +28,8 @@ build = { command = "cargo install worker-build && worker-build --dev" }
 
 # =================[ UUID V4 ]===================
 [vars]
-UUID = "9455ecc8-1b41-4958-9db1-5d8fc898cfb4"
-MAIN_PAGE_URL = "https://raw.githubusercontent.com/vapaxemu/teknik/refs/heads/main/web/index.html"
-SUB_PAGE_URL = "https://raw.githubusercontent.com/vapaxemu/teknik/refs/heads/main/web/sub.html"
+UUID = "c7f299d0-ffdf-4361-9439-00e08e55d2fc"
+MAIN_PAGE_URL = "https://raw.githubusercontent.com/invesibletint/tester/refs/heads/main/web/index.html"
+SUB_PAGE_URL = "https://raw.githubusercontent.com/invesibletint/tester/refs/heads/main/web/sub.html"
 
-# ------- Dimodifikasi oleh: @vpnjatimbot -------
+# ------- Dimodifikasi oleh: @technic -------
