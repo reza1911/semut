@@ -18,8 +18,30 @@ static PROXYKV_PATTERN: Lazy<Regex> = Lazy::new(|| Regex::new(r"^([A-Z]{2})").un
 
 #[event(fetch)]
 async fn main(req: Request, env: Env, _: Context) -> Result<Response> {
-    // Konfigurasi manual agar IP & Port tidak diekspose ke user
-    let config = Config::manual();
+    // Gunakan UUID dari env atau fallback ke nil()
+    let uuid = env
+        .var("UUID")
+        .ok()
+        .and_then(|x| Uuid::parse_str(&x.to_string()).ok())
+        .unwrap_or_else(Uuid::nil);
+
+    let host = req.url()?.host().map(|x| x.to_string()).unwrap_or_default();
+
+    // MAIN_PAGE_URL dan SUB_PAGE_URL bisa kosong tapi tidak crash
+    let main_page_url = env.var("MAIN_PAGE_URL").map(|x| x.to_string()).unwrap_or_default();
+    let sub_page_url = env.var("SUB_PAGE_URL").map(|x| x.to_string()).unwrap_or_default();
+
+    console_log!("host: {host}");
+    console_log!("main_page_url: {main_page_url}");
+
+    let config = Config {
+        uuid,
+        host: host.clone(),
+        proxy_addr: host,
+        proxy_port: 443,
+        main_page_url,
+        sub_page_url,
+    };
 
     Router::with_data(config)
         .on_async("/", fe)
@@ -31,6 +53,11 @@ async fn main(req: Request, env: Env, _: Context) -> Result<Response> {
 }
 
 async fn get_response_from_url(url: String) -> Result<Response> {
+    if url.trim().is_empty() {
+        return Response::ok("Halaman default: Tidak ada URL yang ditentukan.");
+    }
+
+    console_log!("fetching external URL: {}", url);
     let req = Fetch::Url(Url::parse(&url)?);
     let mut res = req.send().await?;
     Response::from_html(res.text().await?)
@@ -45,13 +72,13 @@ async fn sub(_: Request, cx: RouteContext<Config>) -> Result<Response> {
 }
 
 async fn tunnel(req: Request, mut cx: RouteContext<Config>) -> Result<Response> {
-    let mut proxyip = cx.param("proxyip").unwrap().to_string();
+    let mut proxyip = cx.param("proxyip").unwrap_or("default").to_string();
 
-    if PROXYKV_PATTERN.is_match(&proxyip)  {
-        let kvid_list: Vec<String> = proxyip.split(",").map(|s|s.to_string()).collect();
+    if PROXYKV_PATTERN.is_match(&proxyip) {
+        let kvid_list: Vec<String> = proxyip.split(',').map(|s| s.to_string()).collect();
         let kv = cx.kv("AIO")?;
         let mut proxy_kv_str = kv.get("proxy_kv").text().await?.unwrap_or_default();
-        let mut rand_buf = [0u8, 1];
+        let mut rand_buf = [0u8; 1];
         getrandom::getrandom(&mut rand_buf).expect("failed generating random number");
 
         if proxy_kv_str.is_empty() {
