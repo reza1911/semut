@@ -18,7 +18,7 @@ static PROXYKV_PATTERN: Lazy<Regex> = Lazy::new(|| Regex::new(r"^([A-Z]{2})").un
 
 #[event(fetch)]
 async fn main(req: Request, env: Env, _: Context) -> Result<Response> {
-    // Gunakan UUID dari env atau fallback ke nil()
+    // UUID dari environment, fallback ke nil jika gagal
     let uuid = env
         .var("UUID")
         .ok()
@@ -27,7 +27,7 @@ async fn main(req: Request, env: Env, _: Context) -> Result<Response> {
 
     let host = req.url()?.host().map(|x| x.to_string()).unwrap_or_default();
 
-    // MAIN_PAGE_URL dan SUB_PAGE_URL bisa kosong tapi tidak crash
+    // URL halaman utama dan sub, fallback ke kosong
     let main_page_url = env.var("MAIN_PAGE_URL").map(|x| x.to_string()).unwrap_or_default();
     let sub_page_url = env.var("SUB_PAGE_URL").map(|x| x.to_string()).unwrap_or_default();
 
@@ -74,6 +74,7 @@ async fn sub(_: Request, cx: RouteContext<Config>) -> Result<Response> {
 async fn tunnel(req: Request, mut cx: RouteContext<Config>) -> Result<Response> {
     let mut proxyip = cx.param("proxyip").map_or("default".to_string(), |v| v.to_string());
 
+    // Proses pengambilan proxy dari KV jika path cocok pola KV
     if PROXYKV_PATTERN.is_match(&proxyip) {
         let kvid_list: Vec<String> = proxyip.split(',').map(|s| s.to_string()).collect();
         let kv = cx.kv("AIO")?;
@@ -101,11 +102,15 @@ async fn tunnel(req: Request, mut cx: RouteContext<Config>) -> Result<Response> 
     }
 
     let upgrade = req.headers().get("Upgrade")?.unwrap_or_default();
+
     if upgrade == "websocket" && PROXYIP_PATTERN.is_match(&proxyip) {
-        if let Some((addr, port_str)) = proxyip.split_once('-') {
-            if let Ok(port) = port_str.parse() {
-                cx.data.proxy_addr = addr.to_string();
-                cx.data.proxy_port = port;
+        // Jangan override IP kalau path = "vmess"
+        if proxyip != "vmess" {
+            if let Some((addr, port_str)) = proxyip.split_once('-') {
+                if let Ok(port) = port_str.parse() {
+                    cx.data.proxy_addr = addr.to_string();
+                    cx.data.proxy_port = port;
+                }
             }
         }
 
