@@ -34,14 +34,9 @@ async fn main(req: Request, env: Env, _: Context) -> Result<Response> {
     console_log!("host: {host}");
     console_log!("main_page_url: {main_page_url}");
 
-    let config = Config {
-        uuid,
-        host: host.clone(),
-        proxy_addr: host,
-        proxy_port: 443,
-        main_page_url,
-        sub_page_url,
-    };
+   let mut config = Config::manual();
+   config.uuid = uuid;
+   config.host = host;
 
     Router::with_data(config)
         .on_async("/", fe)
