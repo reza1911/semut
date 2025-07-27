@@ -114,11 +114,9 @@ async fn tunnel(req: Request, mut cx: RouteContext<Config>) -> Result<Response> 
         server.accept()?;
 
         wasm_bindgen_futures::spawn_local(async move {
-            let events = server.events().unwrap();
-            if let Err(e) = ProxyStream::new(cx.data, &server, events).process().await {
-                console_error!("[tunnel]: {}", e);
-            }
+            console_log!("WebSocket connected, but stream handling is disabled.");
         });
+
 
         Response::from_websocket(client)
     } else {
