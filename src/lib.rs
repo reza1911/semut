@@ -3,6 +3,7 @@ mod config;
 mod proxy;
 
 use crate::config::Config;
+use crate::proxy::*;
 
 use std::collections::HashMap;
 use base64::{engine::general_purpose::URL_SAFE, Engine as _};
@@ -114,9 +115,11 @@ async fn tunnel(req: Request, mut cx: RouteContext<Config>) -> Result<Response> 
         server.accept()?;
 
         wasm_bindgen_futures::spawn_local(async move {
-            console_log!("WebSocket connected, but stream handling is disabled.");
+            let events = server.events().unwrap();
+            if let Err(e) = ProxyStream::new(cx.data, &server, events).process().await {
+                console_error!("[tunnel]: {}", e);
+            }
         });
-
 
         Response::from_websocket(client)
     } else {
