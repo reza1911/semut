@@ -103,7 +103,7 @@ async fn tunnel(req: Request, mut cx: RouteContext<Config>) -> Result<Response> 
 
     let upgrade = req.headers().get("Upgrade")?.unwrap_or_default();
 
-    if upgrade == "websocket" && PROXYIP_PATTERN.is_match(&proxyip) {
+   if upgrade == "websocket" && (PROXYIP_PATTERN.is_match(&proxyip) || proxyip == "vmess") {
         // Jangan override IP kalau path = "vmess"
         if proxyip != "vmess" {
             if let Some((addr, port_str)) = proxyip.split_once('-') {
