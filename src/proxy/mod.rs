@@ -4,5 +4,4 @@ pub mod trojan;
 pub mod shadowsocks;
 pub mod dns;
 pub mod conn;
-pub mod stream;
 pub use conn::*;
