@@ -3,7 +3,7 @@ mod config;
 mod proxy;
 
 use crate::config::Config;
-use crate::proxy::stream::ProxyStream*;
+use crate::proxy::stream::ProxyStream;
 
 use std::collections::HashMap;
 use base64::{engine::general_purpose::URL_SAFE, Engine as _};
