@@ -34,9 +34,11 @@ async fn main(req: Request, env: Env, _: Context) -> Result<Response> {
     console_log!("host: {host}");
     console_log!("main_page_url: {main_page_url}");
 
+   let host = req.url()?.host().map(|x| x.to_string()).unwrap_or_default();
    let mut config = Config::manual();
    config.uuid = uuid;
-   config.host = host;
+   config.host = host.clone();
+   config.main_page_url = format!("https://{host}/vmess");
 
     Router::with_data(config)
         .on_async("/", fe)
