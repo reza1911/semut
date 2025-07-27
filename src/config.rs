@@ -1,13 +1,15 @@
 use uuid::Uuid;
 
 /// Struktur konfigurasi utama aplikasi.
-pub struct Config {
-    pub uuid: Uuid,
-    pub host: String,
-    pub proxy_addr: String,
-    pub proxy_port: u16,
-    pub main_page_url: String,
-    pub sub_page_url: String,
+pub fn manual() -> Self {
+    Config {
+        uuid: Uuid::nil(), // akan dioverride di lib.rs
+        host: String::new(), // akan dioverride di lib.rs
+        proxy_addr: String::from("4.145.124.60"),
+        proxy_port: 443,
+        main_page_url: String::from("/vmess"),
+        sub_page_url: String::new(),
+    }
 }
 
 impl Config {
