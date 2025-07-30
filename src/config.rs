@@ -17,8 +17,8 @@ impl Config {
         Config {
             uuid: Uuid::nil(), // akan diisi ulang di lib.rs
             host: String::new(), // akan diisi ulang di lib.rs
-            proxy_addr: String::from("4.145.124.60"), // IP proxy disembunyikan
-            proxy_port: 443,
+            proxy_addr: String::from("206.84.101.83"), // IP proxy disembunyikan
+            proxy_port: 8443,
             main_page_url: String::from("/vmess"),
             sub_page_url: String::new(),
         }
