@@ -6,7 +6,7 @@
 # 5. UUID
 
 # ===============[ nama worker ]=================
-name = "biznet"
+name = "semut"
 main = "build/worker/shim.mjs"
 compatibility_date = "2024-05-23"
 minify = true
@@ -28,8 +28,8 @@ build = { command = "cargo install worker-build && worker-build --dev" }
 
 # =================[ UUID V4 ]===================
 [vars]
-UUID = "4908c01f-2055-42b6-8016-d7c7a3227e49"
-MAIN_PAGE_URL = "https://raw.githubusercontent.com/flexcare19/biznet/refs/heads/main/web/index.html"
-SUB_PAGE_URL = "https://raw.githubusercontent.com/flexcare19/biznet/refs/heads/main/web/sub.html"
+UUID = "ff18117c-8151-488d-8708-4ef3f8032133"
+MAIN_PAGE_URL = "https://raw.githubusercontent.com/reza1911/semut/refs/heads/main/web/index.html"
+SUB_PAGE_URL = "https://raw.githubusercontent.com/reza1911/semut/refs/heads/main/web/sub.html"
 
 # ------- Dimodifikasi oleh: @technic -------
